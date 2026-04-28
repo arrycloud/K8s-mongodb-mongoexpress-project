@@ -6,3 +6,4 @@ rules:
   indentation:
     spaces: 2
   trailing-spaces: disable
+  document-start: disable

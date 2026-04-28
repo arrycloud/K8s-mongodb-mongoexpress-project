@@ -15,7 +15,9 @@ jobs:
 
     # 🔍 Validate Kubernetes manifests
     - name: Validate YAML files
-      run: yamllint -c .yamllint.yml manifests/
+      run: |
+        echo "Running yamllint with detailed output..."
+        yamllint -f parsable manifests/
 
     # 🔧 Install kubectl
     - name: Install kubectl
