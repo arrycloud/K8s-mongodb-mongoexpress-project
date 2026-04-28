@@ -1,0 +1,44 @@
+name: Deploy MongoDB + MongoExpress to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 🔍 Validate Kubernetes manifests
+    - name: Validate YAML files
+      run: |
+        echo "Validating Kubernetes YAML files..."
+        sudo apt-get install -y yamllint
+        yamllint manifests/
+
+    # 🔧 Install kubectl
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v4
+      with:
+        version: 'latest'
+
+    # 🔐 Set kubeconfig (from GitHub Secrets)
+    - name: Set up Kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+    # 🚀 Deploy to Kubernetes
+    - name: Deploy to Cluster
+      run: |
+        kubectl apply -f manifests/
+
+    # ✅ Verify Deployment
+    - name: Verify Deployment
+      run: |
+        kubectl get pods
+        kubectl get svc
