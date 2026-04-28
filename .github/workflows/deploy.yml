@@ -15,10 +15,7 @@ jobs:
 
     # 🔍 Validate Kubernetes manifests
     - name: Validate YAML files
-      run: |
-        echo "Validating Kubernetes YAML files..."
-        sudo apt-get install -y yamllint
-        yamllint manifests/
+      run: yamllint -c .yamllint.yml manifests/
 
     # 🔧 Install kubectl
     - name: Install kubectl
